@@ -104,7 +104,7 @@ public class EcranTestController {
 		//On indique que le test a été lancé
 		this.testButton.setStyle("-fx-text-fill: green; ");
 		
-		String cheminAccesImage = "C:\\Users\\hugo\\Desktop\\test_objetDetection\\3oeufs.jpg";
+		String cheminAccesImage = "D:\\cours\\PolytechTours\\5A\\ProjetFinEtude_PFE\\Analyse d'image\\version_en_java\\3oeufs.jpg";
 		
 		Mat frame = this.detection.processImage(cheminAccesImage, 
 							this.hueStart.getValue(), this.saturationStart.getValue(),this.valueStart.getValue(),
