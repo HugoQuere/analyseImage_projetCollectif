@@ -34,20 +34,16 @@ public class Detection {
 	 * 
 	 * @return the {@link Image} to show
 	 */
-	public Mat processImage(String cheminAccesImage,
+	public Mat processImage(Mat imageToProcess,
 							double hueStart, double saturationStart, double valueStart,
 							double hueStop, double saturationStop, double valueStop,
 							ObjectProperty<String> hsvValuesProp,
 							ImageView originalFrame, ImageView maskImage, ImageView morphImage,
 							Label nbOeufsDetecte
 							)
-	{
-		Mat frame = new Mat();
-		
-		frame = Imgcodecs.imread(cheminAccesImage);
-		
+	{	
 		// if the frame is not empty, process it
-		if (!frame.empty())
+		if (!imageToProcess.empty())
 		{
 			// init
 			Mat blurredImage = new Mat();
@@ -56,7 +52,7 @@ public class Detection {
 			Mat morphOutput = new Mat();
 			
 			// remove some noise
-			Imgproc.blur(frame, blurredImage, new Size(7, 7));
+			Imgproc.blur(imageToProcess, blurredImage, new Size(7, 7));
 			
 			// convert the frame to HSV
 			Imgproc.cvtColor(blurredImage, hsvImage, Imgproc.COLOR_BGR2HSV);
@@ -92,22 +88,22 @@ public class Detection {
 			this.updateImageView(morphImage, Utils.mat2Image(morphOutput));
 			
 			// find the tennis ball(s) contours and show them
-			frame = this.findAndDrawEggs(morphOutput, frame, nbOeufsDetecte);
+			imageToProcess = this.findAndDrawEggs(morphOutput, imageToProcess, nbOeufsDetecte);
 			
 			
 			
 			// if the frame is not empty, print it
-			if (!frame.empty())
+			if (!imageToProcess.empty())
 			{
 				// convert and show the frame
-				Image imageToShow = Utils.mat2Image(frame);
+				Image imageToShow = Utils.mat2Image(imageToProcess);
 				updateImageView(originalFrame, imageToShow);
 			}
 			
 			
-			return frame;
+			return imageToProcess;
 		}
-		return frame;
+		return imageToProcess;
 	}
 	
 	/**
@@ -142,7 +138,7 @@ public class Detection {
             if (contours.get(i).rows() > 5) {
                 minEllipse[i] = Imgproc.fitEllipse(new MatOfPoint2f(contours.get(i).toArray()));
                 
-                if (minEllipse[i].size.height<= 700 && minEllipse[i].size.width<=700 && minEllipse[i].size.height >= 300 && minEllipse[i].size.width >= 300) {
+                //if (minEllipse[i].size.height<= 700 && minEllipse[i].size.width<=700 && minEllipse[i].size.height >= 300 && minEllipse[i].size.width >= 300) {
                     //System.out.println("Oeuf n°:" + /*oeuf + */" SIZE_height " + minEllipse[i].size.height);
                     //System.out.println("Oeuf n°:" + /*oeuf + */" SIZE_width " + minEllipse[i].size.width +"\n");
                     //paper.drawEllipseWithBox(box, fitEllipseColor, 2);
@@ -160,7 +156,7 @@ public class Detection {
     	                Imgproc.line(frame, rectPoints[j], rectPoints[(j+1) % 4], color, 50);
     	            }
 
-                }
+                //}
             }
         }
         

@@ -21,6 +21,8 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
@@ -34,6 +36,9 @@ public class EcranTestController {
 	// FXML camera button
 	@FXML
 	private Button testButton;
+	// the FXML area for showing the current frame
+	@FXML
+	private ImageView firstFrame;
 	// the FXML area for showing the current frame
 	@FXML
 	private ImageView originalFrame;
@@ -58,6 +63,10 @@ public class EcranTestController {
 	private Slider valueStop;
 	// FXML label to show the current values set with the sliders
 	@FXML
+	private ComboBox choiceMode;
+	
+	
+	@FXML
 	private Label hsvCurrentValues;
 	// FXML label to show the current number of egg detected
 	@FXML
@@ -67,6 +76,7 @@ public class EcranTestController {
 	private ObjectProperty<String> hsvValuesProp;
 	
 	private Detection detection;
+	private Camera camera;
 	
 	
 	
@@ -85,8 +95,12 @@ public class EcranTestController {
 		//On indique que le test n'a pas été lancé
 		this.testButton.setStyle("-fx-text-fill: red; ");
 		
+		this.choiceMode.getItems().setAll("Camera", "Photo");
+		this.choiceMode.setValue("Camera"); //First value
+		
 		
 		detection = new Detection();
+		camera = new Camera();
     }
 	
 	
@@ -96,7 +110,7 @@ public class EcranTestController {
 	 * The action triggered by pushing the button on the GUI
 	 */
 	@FXML
-	private void startTest()
+	private void buttonStartTest()
 	{
 		long startTime = System.currentTimeMillis();
 		
@@ -104,16 +118,26 @@ public class EcranTestController {
 		//On indique que le test a été lancé
 		this.testButton.setStyle("-fx-text-fill: green; ");
 		
-		String cheminAccesImage = "D:\\cours\\PolytechTours\\5A\\ProjetFinEtude_PFE\\Analyse d'image\\version_en_java\\3oeufs.jpg";
 		
-		Mat frame = this.detection.processImage(cheminAccesImage, 
-							this.hueStart.getValue(), this.saturationStart.getValue(),this.valueStart.getValue(),
-							this.hueStop.getValue(), this.saturationStop.getValue(),this.valueStop.getValue(),
-							this.hsvValuesProp,
-							originalFrame, maskImage, morphImage,
-							nbOeufsDetecte
-					);
+		Mat imageToProcess = new Mat();
+		if(this.choiceMode.getValue().equals("Photo")) {
+			String cheminAccesImage = "D:\\cours\\PolytechTours\\5A\\ProjetFinEtude_PFE\\Analyse d'image\\version_en_java\\3oeufs.jpg";
+			imageToProcess = Imgcodecs.imread(cheminAccesImage);
+		} else { //Par camera
+			imageToProcess = this.camera.captureImage();
+		}
 		
+		Size sizepicture = imageToProcess.size();
+		System.out.println("Height: "+ sizepicture.height);
+		System.out.println("Width: "+ sizepicture.width);
+		
+		this.detection.processImage(imageToProcess, 
+			this.hueStart.getValue(), this.saturationStart.getValue(),this.valueStart.getValue(),
+			this.hueStop.getValue(), this.saturationStop.getValue(),this.valueStop.getValue(),
+			this.hsvValuesProp,
+			originalFrame, maskImage, morphImage,
+			nbOeufsDetecte
+		);
 		
 		long endTime = System.currentTimeMillis();
 		System.out.println("That took " + (endTime - startTime) + " milliseconds");
