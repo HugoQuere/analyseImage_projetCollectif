@@ -65,6 +65,13 @@ public class EcranTestController {
 	@FXML
 	private ComboBox choiceMode;
 	
+	@FXML 
+	private Label labelImage;
+	@FXML 
+	private Label labelMaskImage;
+	@FXML 
+	private Label labelMorphImage;
+	
 	
 	@FXML
 	private Label hsvCurrentValues;
@@ -96,7 +103,7 @@ public class EcranTestController {
 		this.testButton.setStyle("-fx-text-fill: red; ");
 		
 		this.choiceMode.getItems().setAll("Camera", "Photo");
-		this.choiceMode.setValue("Camera"); //First value
+		this.choiceMode.setValue("Photo"); //Default value
 		
 		
 		detection = new Detection();
@@ -121,7 +128,7 @@ public class EcranTestController {
 		
 		Mat imageToProcess = new Mat();
 		if(this.choiceMode.getValue().equals("Photo")) {
-			String cheminAccesImage = "D:\\cours\\PolytechTours\\5A\\ProjetFinEtude_PFE\\Analyse d'image\\version_en_java\\3oeufs.jpg";
+			String cheminAccesImage = System.getProperty("user.dir")+"\\image_test\\3oeufs_2.jpg";
 			imageToProcess = Imgcodecs.imread(cheminAccesImage);
 		} else { //Par camera
 			imageToProcess = this.camera.captureImage();
@@ -138,6 +145,10 @@ public class EcranTestController {
 			originalFrame, maskImage, morphImage,
 			nbOeufsDetecte
 		);
+		
+		labelImage.setVisible(true);
+		labelMaskImage.setVisible(true);
+		labelMorphImage.setVisible(true);
 		
 		long endTime = System.currentTimeMillis();
 		System.out.println("That took " + (endTime - startTime) + " milliseconds");

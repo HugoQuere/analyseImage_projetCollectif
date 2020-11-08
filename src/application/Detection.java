@@ -83,12 +83,15 @@ public class Detection {
 			
 			Imgproc.dilate(morphOutput, morphOutput, dilateElement);
 			Imgproc.dilate(morphOutput, morphOutput, dilateElement);
+			Imgproc.dilate(morphOutput, morphOutput, dilateElement);
+
 			
 			// show the partial output
 			this.updateImageView(morphImage, Utils.mat2Image(morphOutput));
 			
 			// find the tennis ball(s) contours and show them
 			imageToProcess = this.findAndDrawEggs(morphOutput, imageToProcess, nbOeufsDetecte);
+			//imageToProcess = this.findAndDrawEggs(imageToProcess, nbOeufsDetecte);
 			
 			
 			
@@ -118,13 +121,22 @@ public class Detection {
 	 * @return the {@link Mat} image with the objects contours framed
 	 */
 	private Mat findAndDrawEggs(Mat maskedImage, Mat frame, Label nbOeufsDetecte)
+	//private Mat findAndDrawEggs(Mat frame, Label nbOeufsDetecte)
 	{
 		// init
 		List<MatOfPoint> contours = new ArrayList<>();
 		Mat hierarchy = new Mat();
 		
+		
 		// find contours
 		Imgproc.findContours(maskedImage, contours, hierarchy, Imgproc.RETR_CCOMP, Imgproc.CHAIN_APPROX_SIMPLE);
+	    
+	    //Essai avec l'ancien filtre
+		/*
+	    Filtrage filtre = new Filtrage(frame);
+	    Mat filterImage = filtre.processFiltrage();
+	    Imgproc.findContours(filterImage, contours, hierarchy, Imgproc.RETR_CCOMP, Imgproc.CHAIN_APPROX_SIMPLE);
+		*/
 		
 		//Boucle permettant de detecter les ellipses au sein des contours
 		RotatedRect[] minRect = new RotatedRect[contours.size()];
@@ -138,10 +150,8 @@ public class Detection {
             if (contours.get(i).rows() > 5) {
                 minEllipse[i] = Imgproc.fitEllipse(new MatOfPoint2f(contours.get(i).toArray()));
                 
-                //if (minEllipse[i].size.height<= 700 && minEllipse[i].size.width<=700 && minEllipse[i].size.height >= 300 && minEllipse[i].size.width >= 300) {
-                    //System.out.println("Oeuf n°:" + /*oeuf + */" SIZE_height " + minEllipse[i].size.height);
-                    //System.out.println("Oeuf n°:" + /*oeuf + */" SIZE_width " + minEllipse[i].size.width +"\n");
-                    //paper.drawEllipseWithBox(box, fitEllipseColor, 2);
+                if (minEllipse[i].size.height<= 700 && minEllipse[i].size.width<=700 && minEllipse[i].size.height >= 300 && minEllipse[i].size.width >= 300) {
+                    
                     nbOeufs++;
                     
                     Scalar color = new Scalar(rng.nextInt(256), rng.nextInt(256), rng.nextInt(256));
@@ -156,7 +166,7 @@ public class Detection {
     	                Imgproc.line(frame, rectPoints[j], rectPoints[(j+1) % 4], color, 50);
     	            }
 
-                //}
+                }
             }
         }
         

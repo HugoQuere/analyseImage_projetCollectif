@@ -10,17 +10,40 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="418.0" prefWidth="535.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.EcranTestController">
+<BorderPane prefHeight="439.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.EcranTestController">
    <center>
       <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <ImageView fx:id="firstFrame" fitHeight="184.0" fitWidth="246.0" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fx:id="originalFrame" fitHeight="230.0" fitWidth="237.0" pickOnBounds="true" preserveRatio="true" />
             <VBox prefHeight="200.0" prefWidth="100.0">
                <children>
+                  <Label fx:id="labelImage" prefHeight="18.0" prefWidth="342.0" text="Image: " visible="false">
+                     <VBox.margin>
+                        <Insets bottom="5.0" top="10.0" />
+                     </VBox.margin>
+                  </Label>
+                  <ImageView fx:id="originalFrame" fitHeight="317.0" fitWidth="368.0" pickOnBounds="true" preserveRatio="true" />
+               </children>
+               <HBox.margin>
+                  <Insets left="10.0" />
+               </HBox.margin>
+            </VBox>
+            <VBox prefHeight="200.0" prefWidth="100.0">
+               <children>
+                  <Label fx:id="labelMaskImage" text="Mask Image: " visible="false">
+                     <VBox.margin>
+                        <Insets bottom="5.0" top="10.0" />
+                     </VBox.margin>
+                  </Label>
                   <ImageView fx:id="maskImage" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+                  <Label fx:id="labelMorphImage" text="Morph Image:" visible="false">
+                     <VBox.margin>
+                        <Insets bottom="5.0" top="10.0" />
+                     </VBox.margin></Label>
                   <ImageView fx:id="morphImage" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
                </children>
+               <HBox.margin>
+                  <Insets left="10.0" />
+               </HBox.margin>
             </VBox>
          </children>
       </HBox>
@@ -45,12 +68,12 @@
                   <Insets bottom="10.0" />
                </padding></Slider>
 			<Label text="Hue Stop" />
-			<Slider fx:id="hueStop" blockIncrement="1" max="180" min="0" onValueChange="#sliderChange" value="50">
+			<Slider fx:id="hueStop" blockIncrement="1" max="180" min="0" onValueChange="#sliderChange" value="80.0">
                <padding>
                   <Insets bottom="10.0" />
                </padding></Slider>
 			<Label text="Saturation Start" />
-			<Slider fx:id="saturationStart" blockIncrement="1" max="255" min="0" onValueChange="#sliderChange" value="60">
+			<Slider fx:id="saturationStart" blockIncrement="1" max="255" min="0" onValueChange="#sliderChange" value="40.0">
                <padding>
                   <Insets bottom="10.0" />
                </padding></Slider>
@@ -72,6 +95,9 @@
             <Label text="Mode" />
             <ComboBox fx:id="choiceMode" prefWidth="150.0" />
          </children>
+         <BorderPane.margin>
+            <Insets left="10.0" right="10.0" />
+         </BorderPane.margin>
       </VBox>
    </right>
    <bottom>
